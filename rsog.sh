@@ -12,7 +12,6 @@ source oneliner
 export DEBIAN_FRONTEND=noninteractive
 
 trap ctrl_c INT
-langs=['php','perl','python']
 
 function ctrl_c(){
 	echo -e "\n${amarillo} - Salida Forzada ${finColor}"
@@ -22,7 +21,7 @@ function ctrl_c(){
 function ayuda(){
 	# Cargo los oneliners
 	shells=`cut -d'=' -f1 oneliner`
-	langs=$(IFS=$' ';echo "${shells[*]}" )
+	langs=`echo $shells`
 	echo -e "\n${verde}Reverse Shell Oneliner Generator${finColor}"
 	echo -e "\t ${azul}-i${finColor} Interfaz de la cual se obtendrá la IP"
         echo -e "\t ${azul}-p${finColor} Puerto a la escucha. Defecto: 4444"
