@@ -1,3 +1,3 @@
-#Dependencias
+-Dependencias
 
 xclip
