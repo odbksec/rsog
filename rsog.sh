@@ -74,7 +74,7 @@ function ayuda(){
         	oneliner=${line/"##ip##"/$ip}
         	oneliner=${oneliner/"##port##"/$port}
                 echo $oneliner | xclip -sel clip
-                echo -e "\n${amarillo}Resultado: ${finColor}"$oneliner"\n\n"
+                echo -e "\n${amarillo}Resultado: ${finColor}"$oneliner"\n\n${violeta}En su clipboard si tiene instalado XCLIP"$finColor
         else
                 echo -e "\n${rojo}Lenguaje no disponible .... Saliendo${finColor}"
                 exit 0
