@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+function checkPort(){
+	if [[ $@ -eq $@ && $@ -lt 65536 && $@ -gt 0 ]]; then
+		return 1
+	else
+		return 0
+	fi
+}
+
+function checkIp(){
+	return 1
+}
+
+function getIP(){
+
+	return IP
+}
