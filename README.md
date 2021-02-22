@@ -1,4 +1,4 @@
-Reverse Shell Oneliner Generator
+## Reverse Shell Oneliner Generator
 
          -i Interfaz de la cual se obtendrá la IP
          
@@ -8,6 +8,9 @@ Reverse Shell Oneliner Generator
                   php bash perl
                 
          -h Muestra esta ayuda
+
+Ejemplo: ./rsog.sh -i tun0 -l bash -p 8000
+
 
 
 -Dependencias
