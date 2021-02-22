@@ -73,7 +73,7 @@ function ayuda(){
 		echo -e "\t${verde}RShell Seccionada: ${finColor}"$line
         	oneliner=${line/"##ip##"/$ip}
         	oneliner=${oneliner/"##port##"/$port}
-                echo ${oneliner} | xclip
+                echo $oneliner | xclip -sel clip
                 echo -e "\n${amarillo}Resultado: ${finColor}"$oneliner"\n\n"
         else
                 echo -e "\n${rojo}Lenguaje no disponible .... Saliendo${finColor}"
