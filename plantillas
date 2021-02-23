@@ -28,3 +28,8 @@ function error(){
 	    echo -e "\n${rojo}[!]${finColor}\t ${rojo}$@${finColor}\n"
 
 }
+
+function consulta(){
+	    echo -e "\n${amarillo}[?]\t $@${finColor}\n"
+
+}
