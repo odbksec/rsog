@@ -1,4 +1,4 @@
-## Reverse Shell Oneliner Generator
+# Reverse Shell Oneliner Generator
 
          -i Interfaz de la cual se obtendrá la IP
          -l IP local (opcional)
@@ -11,6 +11,6 @@ Ejemplo: ./rsog.sh -i tun0 -l bash -p 8000
 
 
 
-# Dependencias
+## Dependencias
 
 xclip
