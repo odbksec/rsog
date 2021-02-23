@@ -7,7 +7,9 @@
                   php bash perl python ...
          -h Muestra esta ayuda
 
-Ejemplo: ./rsog.sh -i tun0 -l bash -p 8000
+Ejemplo: ./rsog.sh -i tun0 -s bash -p 8000
+
+
 
 
 
