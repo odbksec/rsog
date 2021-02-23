@@ -2,17 +2,56 @@
 
 function checkPort(){
 	if [[ $@ -eq $@ && $@ -lt 65536 && $@ -gt 0 ]]; then
-		return 1
+		echo 1
 	else
-		return 0
+		echo 0
 	fi
 }
 
-function checkIp(){
-	return 1
+function checkIP(){
+	if [[ $@ =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+		echo 1
+	else
+		echo 0
+	fi
 }
 
 function getIP(){
+	# Comprobamos si tenemos ifconfig
+	test -f /usr/sbin/ifconfig
 
-	return IP
+	if [ "$(echo $?)" == "0" ]; then
+		# Cargamos todas las interfaces
+		ifaces=($(ifconfig | grep flags | awk '{ print $1}' | sed -e 's/:$//'))
+		
+		# Checamos que  la interfaz elegida exista si no fallo
+		if [[ "${ifaces[@]}" =~ "$@" ]]; then
+			ip=$(ifconfig "$@" | grep "inet" | grep -v "inet6" | awk '{ print $2}')
+			echo "$ip"
+		else
+			echo 0
+		fi
+		return
+	fi
+	
+
+	# Comprobamos si tenemos ip
+	test -f /usr/sbin/ip
+
+	if [ "$(echo $?)" == "0" ]; then
+		# Cargamos todas las interfaces
+		ifaces=$(ip -o link show | awk '{print $2}' | sed -e 's/:$//')
+
+		# Checamos que  la interfaz elegida exista si no fallo
+		if [[ "${ifaces[@]}" =~ "$@" ]]; then
+			ip=$(ip -4 addr show $@ | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+			echo "$ip"
+		else
+			echo 0
+		fi
+		return
+	fi
+
+	error "Necesita tener instalado ip o ifconfig"
+	exit 0
 }
