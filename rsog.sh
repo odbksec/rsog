@@ -35,7 +35,7 @@ function ayuda(){
 
 #	MAIN
 	banner "${verde}Reverse Shell Oneliner Generator${finColor}"
-	shells=`cut -d'=' -f1 oneliner`
+	shells=`cut -d'=' -f1 oneliner | awk '{print $3}'`
 	langs=`echo $shells`
 
 	while getopts ":i:l:p:s:h" arg; do
@@ -69,7 +69,6 @@ function ayuda(){
         fi
     else
     	ip=$(echo $(getIP $iface))
-    	echo $ip----
     	if [[ $(checkIP $ip) -eq 1 ]] ; then
 			informacion "${verde}IP Local: ${finColor}"$ip
 		else
@@ -80,7 +79,7 @@ function ayuda(){
 	
 	# Checamos lenguaje
 	if [[ "${shells[@]}" =~ "${lang}" ]]; then
-		line=$(eval echo '$'$lang)
+		line=$( eval echo \${${lang}["payload"]} )
 		informacion "${verde}Payload: ${finColor}"$line
       	oneliner=${line/"##ip##"/$ip}
        	oneliner=${oneliner/"##port##"/$port}
@@ -92,11 +91,15 @@ function ayuda(){
         exit 0
     fi
 
-    consulta "¿Desea que ejecute netcat? (s/n)"
+    consulta "¿Desea que iniciemos la escucha? (s/n)"
     read respuesta
 
     if [[ $respuesta == "s" || $respuesta == "S" ]] ; then
-    	sudo nc -l -v -p $port
+    	listen=$( eval echo \${${lang}["listen"]} )
+    	myListen=${listen/"##ip##"/$ip}
+    	myListen=${listen/"##port##"/$port}
+    	informacion "Ejecutando: ${myListen}"
+    	sudo $myListen
     else
     	informacion "Saludos by ODBK"
     fi
